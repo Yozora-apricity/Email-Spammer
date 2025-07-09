@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Email Spammer</title>
+    
+    <!-- Tailwind CSS for layout and structure -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Link to the new stylesheet for colors -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <style>
+        /* Keep base font in the HTML for clarity */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<!-- The `app-bg` class applies the dark background color from style.css -->
+<body class="app-bg">
+
+  <div class="max-w-xl mx-auto p-4 sm:p-6 md:p-8">
+
+    <!-- Header Section -->
+    <header class="flex items-center justify-start mb-8">
+        <div class="flex items-center gap-3">
+            <!-- Lock Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-blue-500">
+              <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3A5.25 5.25 0 0 0 12 1.5Zm-3.75 8.25v-3a3.75 3.75 0 1 1 7.5 0v3h-7.5Z" clip-rule="evenodd" />
+            </svg>
+            <!-- `text-main` applies the primary text color -->
+            <h1 class="text-2xl font-bold text-main">
+                Secure Email Spammer
+            </h1>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mb-6 space-y-3">
+      {% for category, message in messages %}
+        <!-- Custom classes for flash message colors -->
+        {% if category == 'success' %}
+          <div class="px-4 py-3 rounded-lg text-sm flash-success" role="alert">
+            <span>{{ message }}</span>
+          </div>
+        {% elif category == 'error' %}
+          <div class="px-4 py-3 rounded-lg text-sm flash-error" role="alert">
+            <span>{{ message }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Main Email Form -->
+    <!-- `card-bg` applies the form's background color -->
+    <form method="POST" enctype="multipart/form-data" class="space-y-6 p-8 rounded-2xl card-bg">
+      <div>
+        <label for="recipient" class="block text-sm font-medium mb-2">Recipient Email</label>
+        <!-- `input-field` class applies all input styling -->
+        <input id="recipient" type="email" name="recipient" required
+          class="w-full px-4 py-2.5 rounded-lg focus:outline-none transition-shadow input-field" />
+      </div>
+
+      <div>
+        <label for="subject" class="block text-sm font-medium mb-2">Subject</label>
+        <input id="subject" type="text" name="subject" required
+          class="w-full px-4 py-2.5 rounded-lg focus:outline-none transition-shadow input-field" />
+      </div>
+
+      <div>
+        <label for="body" class="block text-sm font-medium mb-2">Message</label>
+        <textarea id="body" name="body" rows="6" required
+          class="w-full px-4 py-2.5 rounded-lg focus:outline-none transition-shadow input-field"></textarea>
+      </div>
+
+      <div>
+        <label for="repeat" class="block text-sm font-medium mb-2">Repeat Count</label>
+        <input id="repeat" type="number" name="repeat" value="1" min="1"
+          class="w-full px-4 py-2.5 rounded-lg focus:outline-none transition-shadow input-field" />
+      </div>
+
+      <div>
+        <label for="attachment" class="block text-sm font-medium mb-2">Attach Image (optional)</label>
+        <input id="attachment" type="file" name="attachment"
+          class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold hover:file:bg-gray-700 transition-colors file-input-button" />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="w-full font-semibold px-4 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#0d1117] focus:ring-blue-500 transition-all duration-200 flex items-center justify-center gap-2 submit-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+          <path d="M3.105 2.289a.75.75 0 0 0-.826.95l1.414 4.949a.75.75 0 0 0 .95.826L11.25 8.25l-5.607-1.98-2.538-3.981Z" />
+          <path d="M15 8.25a.75.75 0 0 0-.75-.75h-2.5a.75.75 0 0 0 0 1.5h2.5a.75.75 0 0 0 .75-.75Z" />
+          <path d="M3.105 17.71a.75.75 0 0 0 .826-.95l-1.414-4.949a.75.75 0 0 0-.95-.826L-1.25 11.75l5.607 1.98 2.538 3.981Z" />
+          <path d="M5 11.75a.75.75 0 0 0 .75.75h2.5a.75.75 0 0 0 0-1.5h-2.5a.75.75 0 0 0-.75.75Z" />
+        </svg>
+        Send Email
+      </button>
+    </form>
+    
+    <!-- Footer -->
+    <footer class="text-center mt-8 text-sm">
+      <p>Made by Yozora using Flask & Tailwind CSS</p>
+    </footer>
+  </div>
+
+</body>
+</html>

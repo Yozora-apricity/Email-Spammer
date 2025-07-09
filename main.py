@@ -65,3 +65,9 @@ class EmailSender:
             for i in range(repeat):
                 smtp.send_message(msg)
                 print(f"✅ Email {i + 1} sent to {recipient}")
+                
+class BrowserOpener:
+    @staticmethod
+    def open_browser():
+        url = "http://127.0.0.1:5000"
+        webbrowser.open(url)
