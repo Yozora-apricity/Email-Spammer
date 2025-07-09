@@ -71,3 +71,69 @@ class BrowserOpener:
     def open_browser():
         url = "http://127.0.0.1:5000"
         webbrowser.open(url)
+        
+class AppController:
+    def __init__(self):
+        self.app = Flask(__name__)
+        self.app.secret_key = 'supersecretkey'
+        self.upload_folder = 'uploads'
+        self.app.config['UPLOAD_FOLDER'] = self.upload_folder
+
+        self.email_sender = EmailSender(
+            os.getenv("SENDER_EMAIL"),
+            os.getenv("SENDER_APP_PASSWORD")
+        )
+
+        if not os.path.exists(self.upload_folder):
+            os.makedirs(self.upload_folder)
+
+        self.setup_routes()
+
+    def setup_routes(self):
+        @self.app.route('/', methods=['GET', 'POST'])
+        def index():
+            if request.method == 'POST':
+                recipient = request.form.get('recipient')
+                subject = request.form.get('subject')
+                body = request.form.get('body')
+                repeat_raw = request.form.get('repeat', '1')
+
+                # Validate required fields
+                if not recipient or not subject or not body:
+                    flash("❌ All fields (recipient, subject, and body) are required.", "error")
+                    return redirect('/')
+
+                # Parse repeat count
+                try:
+                    repeat = max(1, int(repeat_raw))
+                except ValueError:
+                    flash("❌ Repeat must be a number.", "error")
+                    return redirect('/')
+
+                # Handle file upload
+                file = request.files.get('attachment')
+                attachment_path = None
+                if file and file.filename:
+                    filename = secure_filename(file.filename)
+                    attachment_path = os.path.join(self.app.config['UPLOAD_FOLDER'], filename)
+                    file.save(attachment_path)
+
+                # Send email
+                try:
+                    self.email_sender.send_email(recipient, subject, body, attachment_path, repeat)
+                    flash(f"✅ Email sent to {recipient} ({repeat} time(s))!", "success")
+                except Exception as e:
+                    flash(f"❌ Failed to send email: {e}", "error")
+
+                return redirect('/')
+
+            return render_template('index.html')
+
+    def run(self):
+        threading.Thread(target=BrowserOpener.open_browser).start()
+        self.app.run(debug=True)
+
+
+if __name__ == '__main__':
+    controller = AppController()
+    controller.run()
