@@ -1,0 +1,91 @@
+/* static/style.css */
+/* This file contains all the color definitions for the dark theme.
+  Layout and sizing are still handled by Tailwind CSS in the HTML.
+*/
+
+/* Define CSS variables for the color palette for easy management */
+:root {
+    --bg-primary: #0d1117;      /* Main background color */
+    --bg-secondary: #161b22;    /* Card/Form background color */
+    --bg-input: #010409;        /* Input field background */
+    
+    --border-color: #30363d;    /* Border for inputs and other elements */
+    
+    --text-primary: #e6edf3;    /* Main text color for headings */
+    --text-secondary: #7d8590;  /* Lighter text for labels and paragraphs */
+    
+    --accent-primary: #2f81f7;  /* Main button and link color */
+    --accent-hover: #388bfd;    /* Hover color for buttons */
+
+    --success-bg: rgba(34, 139, 34, 0.15);
+    --success-border: rgba(34, 139, 34, 0.5);
+    --success-text: #3fb950;
+
+    --error-bg: rgba(248, 81, 73, 0.15);
+    --error-border: rgba(248, 81, 73, 0.5);
+    --error-text: #f85149;
+}
+
+/* Apply base colors to the body */
+body.app-bg {
+    background-color: var(--bg-primary);
+    color: var(--text-secondary);
+}
+
+/* Text color for primary headings */
+.text-main {
+    color: var(--text-primary);
+}
+
+/* Form container background */
+.card-bg {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* Styling for input and textarea fields */
+.input-field {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.input-field:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(47, 129, 247, 0.3); /* Blue focus ring */
+}
+
+/* Custom file input button style */
+.file-input-button {
+    color: var(--text-primary);
+    background-color: #21262d;
+    border: 1px solid var(--border-color);
+}
+
+.file-input-button:hover {
+    background-color: #30363d;
+}
+
+
+/* Primary submit button */
+.submit-button {
+    background-color: var(--accent-primary);
+    color: #ffffff;
+}
+
+.submit-button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Flash message styles */
+.flash-success {
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-text);
+}
+
+.flash-error {
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-text);
+}
