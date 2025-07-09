@@ -26,3 +26,28 @@
 # 6. In the main block:
 #    - Create AppController instance
 #    - Start the app with debugging enabled
+
+from flask import Flask, render_template, request, redirect, flash
+from werkzeug.utils import secure_filename
+from email.message import EmailMessage
+from dotenv import load_dotenv
+import mimetypes
+import smtplib
+import threading
+import webbrowser
+import os
+
+class EmailSender:
+    def __init__(self, sender_email, sender_password):
+        self.sender_email = sender_email
+        self.sender_password = sender_password
+
+    def send_email(self, recipient, subject, body, attachment_path=None, repeat=1):
+        if not self.sender_email or not self.sender_password:
+            raise ValueError("Missing sender credentials in .env file.")
+
+        msg = EmailMessage()
+        msg['From'] = self.sender_email
+        msg['To'] = recipient
+        msg['Subject'] = subject
+        msg.set_content(body)
