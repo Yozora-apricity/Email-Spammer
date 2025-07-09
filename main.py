@@ -51,3 +51,17 @@ class EmailSender:
         msg['To'] = recipient
         msg['Subject'] = subject
         msg.set_content(body)
+        
+        if attachment_path and os.path.isfile(attachment_path):
+            mime_type, _ = mimetypes.guess_type(attachment_path)
+            maintype, subtype = mime_type.split('/', 1) if mime_type else ('application', 'octet-stream')
+            with open(attachment_path, 'rb') as file:
+                msg.add_attachment(file.read(), maintype=maintype, subtype=subtype,
+                                   filename=os.path.basename(attachment_path))
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login(self.sender_email, self.sender_password)
+            for i in range(repeat):
+                smtp.send_message(msg)
+                print(f"✅ Email {i + 1} sent to {recipient}")
