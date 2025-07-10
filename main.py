@@ -130,8 +130,9 @@ class AppController:
             return render_template('index.html')
 
     def run(self):
-        threading.Thread(target=BrowserOpener.open_browser).start()
-        self.app.run(debug=True)
+        #threading.Thread(target=BrowserOpener.open_browser).start()
+        #self.app.run(debug=True)
+        self.app.run(host='0.0.0.0', port=5000)
 
 
 if __name__ == '__main__':
